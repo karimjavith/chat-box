@@ -1,0 +1,12 @@
+{
+    "trailingComma": "all",
+    "tabWidth": 4,
+    "printWidth": 100,
+    "editor.formatOnSave": true,
+    "requireConfig": false,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": true,
+    "bracketSpacing": true,
+    "jsxBracketSameLine": false
+}
