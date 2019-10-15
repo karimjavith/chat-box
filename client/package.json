@@ -11,17 +11,16 @@
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-scripts": "3.2.0",
-    "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.1",
     "socket.io-client": "^2.3.0",
     "styled-components": "^4.4.0",
     "typescript": "^3.6.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -39,6 +38,8 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^5.5.0",
+    "@semantic-ui-react/craco-less": "^1.1.0",
     "@types/socket.io-client": "^1.4.32",
     "@types/styled-components": "^4.1.19",
     "@typescript-eslint/eslint-plugin": "^2.3.3",
@@ -47,6 +48,7 @@
     "eslint-config-prettier": "^6.4.0",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-react": "^7.16.0",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "semantic-ui-less": "^2.4.1"
   }
 }

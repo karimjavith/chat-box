@@ -1,26 +1,14 @@
 [
   {
-    "message": "Hey",
-    "period": "14/10/2019"
+    "message": "Hi",
+    "period": "15/10/2019, 13:46:29"
   },
   {
-    "message": "Good morning",
-    "period": "14/10/2019"
+    "message": "I have a layout with tabular data, and the table is expanding outside of the layout.\n\nThe “real” data can’t be line wrapped any more than it already is, but it is still too wide for a 1024x768 resolution. I’m perfectly fine with horizontal scrolling, but when that happens, the table breaks out of the layout and the layout just stops at the edge of the original viewable area.\n\nIs there a way to let the divs contain the table so things like background color actually go 100% width?\n\nexample below, and I’m using the sticky footer found here: http://www.cssstickyfooter.com/ 3",
+    "period": "15/10/2019, 13:49:15"
   },
   {
-    "message": "Hello world",
-    "period": "14/10/2019"
-  },
-  {
-    "message": null,
-    "period": "14/10/2019"
-  },
-  {
-    "message": "Welcome",
-    "period": "14/10/2019"
-  },
-  {
-    "message": "Good noon",
-    "period": "14/10/2019"
+    "message": "I used the doctype for HTML5.\n\ntable-layout broke the table. The cell contents overlapped each other.\n\nI ended up wrapping a div around the table and just applied overflow:auto to that.\n\nNot the way I would’ve liked to have solved it, but it’s better than letting the layout break.",
+    "period": "15/10/2019, 13:49:25"
   }
 ]

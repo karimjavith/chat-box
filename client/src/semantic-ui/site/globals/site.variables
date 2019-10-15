@@ -1,0 +1,9 @@
+/*******************************
+     User Global Variables
+*******************************/
+
+@primaryColor      : #000;
+@pageBackground    : #eff0f1;
+@fontName          : 'Work Sans';
+@emSize            : 16px;
+@fontSize          : 16px;
