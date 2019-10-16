@@ -1,7 +1,23 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import io from 'socket.io-client';
 import styled from 'styled-components';
-import { Button, Comment, Form, Header, Container, Segment } from 'semantic-ui-react';
+import { Button, Comment, Form, Container, Segment, List, Image } from 'semantic-ui-react';
+import cp from 'child_process';
+import os from 'os';
+
+const getUsername = () => {
+    switch (process.platform) {
+        case 'win32':
+            return process.env.COMPUTERNAME;
+        case 'darwin':
+            return cp
+                .execSync('scutil --get ComputerName')
+                .toString()
+                .trim();
+        default:
+            return os.hostname();
+    }
+};
 
 const socket = io('http://localhost:3002');
 
@@ -18,8 +34,10 @@ const CommentContainer = styled(Container)`
     height: 100%;
     width: 100% !important;
 `;
-const CommentHeader = styled(Header)`
-    color: #fff;
+const HeaderSegment = styled(Segment)`
+    max-width: 650px !important;
+    margin: 0 auto !important;
+    border-radius: 0 !important;
 `;
 const CommentSegment = styled(Segment)`
     display: table-cell;
@@ -46,6 +64,7 @@ const MessageButton = styled(Button)`
 type Chat = {
     message: string;
     period: string;
+    userName: string;
 };
 type MessageState = {
     message: string;
@@ -73,59 +92,84 @@ const Messages = () => {
     const sendMessage = (message: string) => {
         setstate({
             ...state,
-            chat: [...state.chat, { message, period: new Date().toLocaleString() }],
+            chat: [
+                ...state.chat,
+                { message, period: new Date().toLocaleString(), userName: getUsername() },
+            ],
             message: '',
         });
-        socket.emit('chat message', { message: message, period: new Date().toLocaleString() });
+        socket.emit('chat message', {
+            message: message,
+            period: new Date().toLocaleString(),
+            userName: getUsername(),
+        });
     };
     const handleChange = (event: any) => setstate({ ...state, message: event.currentTarget.value });
     return (
-        <CommentGroup>
-            <CommentHeader as="h3" dividing>
-                Comments
-            </CommentHeader>
-            <CommentContainer>
-                <CommentSegment>
-                    {state.chat &&
-                        state.chat.length > 0 &&
-                        state.chat.map((item: Chat, index: number) => (
-                            <MessageComment
-                                key={item.message}
-                                style={{ float: index % 2 === 0 ? 'right' : 'left' }}
-                            >
-                                <Comment.Avatar src="https://icon-library.net/images/my-profile-icon-png/my-profile-icon-png-3.jpg" />
-                                <Comment.Content>
-                                    <Comment.Author as="a">User</Comment.Author>
-                                    <Comment.Metadata>
-                                        <div>{item.period}</div>
-                                    </Comment.Metadata>
-                                    <MessageText>{item.message}</MessageText>
-                                </Comment.Content>
-                            </MessageComment>
-                        ))}
+        <>
+            <HeaderSegment>
+                <List relaxed="very">
+                    <List.Item as="a">
+                        <Image
+                            avatar
+                            src="https://icon-library.net/images/my-profile-icon-png/my-profile-icon-png-3.jpg"
+                        />
+                        <List.Content>
+                            <List.Header>{getUsername().toUpperCase()}</List.Header>
+                            <List.Description>
+                                {socket.connected && 'online'}
+                                {socket.disconnected && 'offline'}
+                            </List.Description>
+                        </List.Content>
+                    </List.Item>
+                </List>
+            </HeaderSegment>
+            <CommentGroup>
+                <CommentContainer>
+                    <CommentSegment>
+                        {state.chat &&
+                            state.chat.length > 0 &&
+                            state.chat.map((item: Chat, index: number) => (
+                                <MessageComment
+                                    key={item.message}
+                                    style={{ float: index % 2 === 0 ? 'right' : 'left' }}
+                                >
+                                    <Comment.Avatar src="https://icon-library.net/images/my-profile-icon-png/my-profile-icon-png-3.jpg" />
+                                    <Comment.Content>
+                                        <Comment.Author as="a">
+                                            {item.userName || 'Anonymous'}
+                                        </Comment.Author>
+                                        <Comment.Metadata>
+                                            <div>{item.period}</div>
+                                        </Comment.Metadata>
+                                        <MessageText>{item.message}</MessageText>
+                                    </Comment.Content>
+                                </MessageComment>
+                            ))}
 
-                    <MessageForm reply>
-                        <Form.TextArea
-                            id="input-text"
-                            value={state.message}
-                            onChange={handleChange}
-                        />
-                        <MessageButton
-                            floated="right"
-                            animated="fade"
-                            content="Send message"
-                            labelPosition="right"
-                            icon="edit"
-                            primary
-                            disabled={!state.message}
-                            onClick={() => {
-                                sendMessage(state.message);
-                            }}
-                        />
-                    </MessageForm>
-                </CommentSegment>
-            </CommentContainer>
-        </CommentGroup>
+                        <MessageForm reply>
+                            <Form.TextArea
+                                id="input-text"
+                                value={state.message}
+                                onChange={handleChange}
+                            />
+                            <MessageButton
+                                floated="right"
+                                animated="fade"
+                                content="Send message"
+                                labelPosition="right"
+                                icon="edit"
+                                primary
+                                disabled={!state.message || socket.disconnected}
+                                onClick={() => {
+                                    sendMessage(state.message);
+                                }}
+                            />
+                        </MessageForm>
+                    </CommentSegment>
+                </CommentContainer>
+            </CommentGroup>
+        </>
     );
 };
 
